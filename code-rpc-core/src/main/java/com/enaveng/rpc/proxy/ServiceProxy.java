@@ -21,7 +21,6 @@ public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         JdkSerializer jdkSerializer = new JdkSerializer();
-
         //构造请求对象
         RpcRequest rpcRequest = new RpcRequest.Builder()
                 .setMethodName(method.getName())

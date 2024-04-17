@@ -2,14 +2,14 @@ package com.enaveng.example.consumer;
 
 import com.enaveng.example.common.model.User;
 import com.enaveng.example.common.service.UserService;
-import com.enaveng.rpc.proxy.ServiceProxy;
+import com.enaveng.rpc.config.RpcConfig;
 import com.enaveng.rpc.proxy.ServiceProxyFactory;
+import com.enaveng.rpc.utils.ConfigUtils;
 
-/**
- * 简易服务消费者示例
- */
-public class EasyConsumerExample {
+public class ConsumerExample {
     public static void main(String[] args) {
+//        RpcConfig rpc = ConfigUtils.loadConfig(RpcConfig.class, "rpc");
+//        System.out.println(rpc);
         //参数为 指定代理类所需要实现的接口
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
@@ -21,5 +21,7 @@ public class EasyConsumerExample {
         } else {
             System.out.println("user is null");
         }
+        int nub = userService.getNub();
+        System.out.println(nub);
     }
 }
