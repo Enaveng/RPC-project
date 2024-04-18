@@ -2,4 +2,6 @@ rpc:
   name: codeRpc
   version: 2.0
   serverPort: 8011
-  mock: true
+  mock: false
+  #  小写
+  serializer: jdk

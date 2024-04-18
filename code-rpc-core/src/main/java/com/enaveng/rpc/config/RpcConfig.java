@@ -1,6 +1,7 @@
 package com.enaveng.rpc.config;
 
 
+import com.enaveng.rpc.serializable.SerializerKeys;
 import lombok.Data;
 
 /**
@@ -37,4 +38,9 @@ public class RpcConfig {
      * 是否开启模拟调用
      */
     private boolean mock = false;
+
+    /**
+     * 使用的序列化器 默认为Jdk序列化
+     */
+    private String serializer  = SerializerKeys.JDK;
 }

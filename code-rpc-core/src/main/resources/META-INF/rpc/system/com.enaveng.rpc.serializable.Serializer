@@ -1,0 +1,4 @@
+jdk=com.enaveng.rpc.serializable.JdkSerializer
+json=com.enaveng.rpc.serializable.JsonSerializer
+kryo=com.enaveng.rpc.serializable.KryoSerializer
+hessian=com.enaveng.rpc.serializable.HessianSerializer
