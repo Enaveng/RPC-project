@@ -1,13 +1,15 @@
 package com.enaveng.rpc.model;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
+import com.enaveng.rpc.constant.RpcConstant;
 import com.enaveng.rpc.serializable.Serializer;
 
 /**
  * 封装调用所需的信息 是Java反射机制的必要参数
  */
-public class RpcRequest implements Serializable{
+public class RpcRequest implements Serializable {
 
     /**
      * 服务名称
@@ -18,6 +20,11 @@ public class RpcRequest implements Serializable{
      * 方法名称
      */
     private String methodName;
+
+    /**
+     * 服务版本
+     */
+    private String serviceVersion = RpcConstant.DEFAULT_SERVICE_VERSION;
 
     /**
      * 参数类型列表
@@ -32,6 +39,7 @@ public class RpcRequest implements Serializable{
     public RpcRequest(Builder builder) {
         this.serviceName = builder.serviceName;
         this.methodName = builder.methodName;
+        this.serviceVersion = builder.serviceVersion;
         this.parameterTypes = builder.parameterTypes;
         this.args = builder.args;
     }
@@ -42,6 +50,7 @@ public class RpcRequest implements Serializable{
     public static class Builder {
         private String serviceName;
         private String methodName;
+        private String serviceVersion;
         private Class<?>[] parameterTypes;
         private Object[] args;
 
@@ -52,6 +61,11 @@ public class RpcRequest implements Serializable{
 
         public Builder setMethodName(String methodName) {
             this.methodName = methodName;
+            return this;
+        }
+
+        public Builder setServiceVersion(String serviceVersion) {
+            this.serviceVersion = serviceVersion;
             return this;
         }
 
@@ -98,6 +112,14 @@ public class RpcRequest implements Serializable{
         return args;
     }
 
+    public String getServiceVersion() {
+        return serviceVersion;
+    }
+
+    public void setServiceVersion(String serviceVersion) {
+        this.serviceVersion = serviceVersion;
+    }
+
     public void setArgs(Object[] args) {
         this.args = args;
     }
@@ -107,12 +129,9 @@ public class RpcRequest implements Serializable{
         return "RpcRequest{" +
                 "serviceName='" + serviceName + '\'' +
                 ", methodName='" + methodName + '\'' +
+                ", serviceVersion='" + serviceVersion + '\'' +
                 ", parameterTypes=" + Arrays.toString(parameterTypes) +
                 ", args=" + Arrays.toString(args) +
                 '}';
-    }
-
-    public static void main(String[] args) {
-
     }
 }

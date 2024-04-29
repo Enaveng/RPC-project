@@ -56,6 +56,8 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
                 Class<?> impClass = LocalRegistry.getService(rpcRequest.getServiceName());
                 //获得指定方法名和参数类型的Method的对象
                 Method method = impClass.getMethod(rpcRequest.getMethodName(), rpcRequest.getParameterTypes());
+//                ClassLoader classLoader = impClass.getClassLoader();
+//                Class<?> name = classLoader.loadClass(rpcRequest.getServiceName());
                 //参数一表示要调用方法的对象实例 参数二表示传递的具体参数
                 Object data = method.invoke(impClass.newInstance(), rpcRequest.getArgs());
                 //封装

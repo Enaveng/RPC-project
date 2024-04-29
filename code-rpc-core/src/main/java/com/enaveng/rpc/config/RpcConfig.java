@@ -1,6 +1,7 @@
 package com.enaveng.rpc.config;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.enaveng.rpc.serializable.SerializerKeys;
 import lombok.Data;
 
@@ -9,10 +10,6 @@ import lombok.Data;
  */
 @Data
 public class RpcConfig {
-
-    private RpcConfig(){
-
-    }
 
     /**
      * 名称
@@ -42,5 +39,11 @@ public class RpcConfig {
     /**
      * 使用的序列化器 默认为Jdk序列化
      */
-    private String serializer  = SerializerKeys.JDK;
+    private String serializer = SerializerKeys.JDK;
+
+    /**
+     * 注册中心配置
+     */
+    private RegistryConfig registryConfig = new RegistryConfig();
+
 }

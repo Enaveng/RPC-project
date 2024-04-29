@@ -1,16 +1,24 @@
 package com.enaveng.rpc.proxy;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.enaveng.rpc.RpcApplication;
+import com.enaveng.rpc.config.RegistryConfig;
+import com.enaveng.rpc.config.RpcConfig;
+import com.enaveng.rpc.constant.RpcConstant;
 import com.enaveng.rpc.model.RpcRequest;
 import com.enaveng.rpc.model.RpcResponse;
+import com.enaveng.rpc.model.ServiceMetaInfo;
+import com.enaveng.rpc.registry.Registry;
+import com.enaveng.rpc.registry.RegistryFactory;
 import com.enaveng.rpc.serializable.JdkSerializer;
 import com.enaveng.rpc.serializable.Serializer;
 import com.enaveng.rpc.serializable.SerializerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * 动态代理
@@ -35,8 +43,22 @@ public class ServiceProxy implements InvocationHandler {
                 .build();
         //对象序列化调用接口
         byte[] bodyBytes = serializer.serialize(rpcRequest);
+        //读取注册中心配置
+        RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegister());
+        ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+        serviceMetaInfo.setServiceName(rpcRequest.getServiceName());
+        serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+        List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
+        if (CollUtil.isEmpty(serviceMetaInfoList)) {
+            throw new RuntimeException("暂无服务地址");
+        }
+        //暂时先取第一个
+        ServiceMetaInfo metaInfo = serviceMetaInfoList.get(0);
+
         //此处被硬编码 后续更改为从注册中心获取
-        HttpResponse httpResponse = HttpRequest.post("http://localhost:8011")
+        HttpResponse httpResponse = HttpRequest.post(metaInfo.getServiceAddress())
                 .body(bodyBytes)
                 .execute();
         byte[] result = httpResponse.bodyBytes(); //获取响应流字节码

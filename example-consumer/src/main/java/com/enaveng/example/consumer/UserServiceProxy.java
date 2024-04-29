@@ -36,7 +36,7 @@ public class UserServiceProxy implements UserService {
             //进行序列化
             byte[] bodyBytes = serializer.serialize(rpcRequest);
             byte[] result;
-            HttpResponse httpResponse = HttpRequest.post("http://localhost:8888")
+            HttpResponse httpResponse = HttpRequest.post("http://localhost:8011")
                     .body(bodyBytes)
                     .execute();
             result = httpResponse.bodyBytes(); //获取响应流字节码
