@@ -6,6 +6,7 @@ import com.enaveng.rpc.constant.RpcConstant;
 import com.enaveng.rpc.registry.Registry;
 import com.enaveng.rpc.registry.RegistryFactory;
 import com.enaveng.rpc.utils.ConfigUtils;
+import io.etcd.jetcd.Client;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,17 +18,18 @@ public class RpcApplication {
 
     private static volatile RpcConfig rpcConfig;
 
-    public static void init(RpcConfig newRpcConfig) {
+    public static Registry init(RpcConfig newRpcConfig) {
         rpcConfig = newRpcConfig;
         log.info("rpc init , config = {}", newRpcConfig.toString());
         //注册中心初始化
-        RegistryConfig registryConfig = newRpcConfig.getRegistryConfig();
+        RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
         Registry registry = RegistryFactory.getInstance(registryConfig.getRegister());
         registry.init(registryConfig);
         log.info("registry init , config ={}", registryConfig);
+        return registry;
     }
 
-    public static void init() {
+    public static Registry init() {
         RpcConfig newRpcConfig;
         try {
             //从配置文件当中读取配置
@@ -36,7 +38,8 @@ public class RpcApplication {
             // 配置加载失败，使用默认值
             newRpcConfig = new RpcConfig();
         }
-        init(newRpcConfig);
+        Registry registry = init(newRpcConfig);
+        return registry;
     }
 
     public static RpcConfig getRpcConfig() {
