@@ -5,12 +5,14 @@ import cn.hutool.json.JSONUtil;
 import com.enaveng.rpc.config.RegistryConfig;
 import com.enaveng.rpc.model.ServiceMetaInfo;
 import io.etcd.jetcd.*;
+import io.etcd.jetcd.kv.GetResponse;
 import io.etcd.jetcd.options.GetOption;
 import io.etcd.jetcd.options.PutOption;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -31,7 +33,7 @@ public class EtcdRegistry implements Registry {
         //创建客户端
         client = Client.builder()
                 .endpoints(registryConfig.getAddress())  //连接地址
-                .connectTimeout(Duration.ofMillis(registryConfig.getTimeout()))  //设置客户端过期时间
+                .connectTimeout(Duration.ofMillis(registryConfig.getTimeout()))  //设置客户端的连接超时时间
                 .build();
 
         kvClient = client.getKVClient();
@@ -43,7 +45,7 @@ public class EtcdRegistry implements Registry {
         Lease leaseClient = client.getLeaseClient();
 
         //创建一个30秒的租约
-        long leaseId = leaseClient.grant(30).get().getID();
+        long leaseId = leaseClient.grant(3000).get().getID();
 
         //设置要存储的键值对
         String registerKey = ETCD_ROOT_PATH + serviceMetaInfo.getServiceNodeKey();
@@ -73,6 +75,7 @@ public class EtcdRegistry implements Registry {
         try {
             //前缀查询
             GetOption getOption = GetOption.builder().isPrefix(true).build();
+            //首先得到的是一个CompletableFuture 使用get()得到执行完的返回结果 再通过getKvs()得到KeyValue集合数据
             List<KeyValue> keyValues = kvClient.get(ByteSequence.from(searchPrefix, StandardCharsets.UTF_8), getOption).get().getKvs();
             //解析服务信息
             return keyValues.stream().map(keyValue -> {

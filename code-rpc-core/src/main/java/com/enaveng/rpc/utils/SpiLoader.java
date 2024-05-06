@@ -69,7 +69,7 @@ public class SpiLoader {
         Class<?> implClass = keyClassMap.get(key);
         //从实例缓存中加载指定类型的实例 没有就将已经加载过的实例对象添加到缓存中
         String implClassName = implClass.getName();
-        if (!instanceCache.containsKey(implClass)) {
+        if (!instanceCache.containsKey(implClassName)) {
             try {
                 instanceCache.put(implClassName, implClass.newInstance());
             } catch (Exception e) {

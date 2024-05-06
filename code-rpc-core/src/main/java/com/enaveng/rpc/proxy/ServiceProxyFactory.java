@@ -19,9 +19,9 @@ public class ServiceProxyFactory {
      */
     public static <T> T getProxy(Class<T> serviceClass) {
         //判断是否开启模拟调用
-        if (RpcApplication.getRpcConfig().isMock()) {
-            return getMockProxy(serviceClass);
-        }
+//        if (RpcApplication.getRpcConfig().isMock()) {
+//            return getMockProxy(serviceClass);
+//        }
 
         //使用jdk自带的Proxy类来动态创建代理类对象
         return (T) Proxy.newProxyInstance(serviceClass.getClassLoader(),

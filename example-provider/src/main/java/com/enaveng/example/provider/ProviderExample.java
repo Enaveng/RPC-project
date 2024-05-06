@@ -9,12 +9,12 @@ import com.enaveng.rpc.registry.LocalRegistry;
 import com.enaveng.rpc.registry.Registry;
 import com.enaveng.rpc.registry.RegistryFactory;
 import com.enaveng.rpc.server.VertxHttpServer;
-import io.etcd.jetcd.Client;
+
 
 public class ProviderExample {
     public static void main(String[] args) {
         //RPC框架初始化
-        Registry registry = RpcApplication.init();
+        RpcApplication.init();
 
         //注册服务
         String serviceName = UserService.class.getName();
@@ -23,7 +23,7 @@ public class ProviderExample {
         //注册服务到etcd注册中心
         RpcConfig rpcConfig = RpcApplication.getRpcConfig();
         RegistryConfig registryConfig = rpcConfig.getRegistryConfig();
-//        Registry registry = RegistryFactory.getInstance(registryConfig.getRegister());
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegister());
         ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName(serviceName);
         serviceMetaInfo.setServicePort(rpcConfig.getServerPort());
