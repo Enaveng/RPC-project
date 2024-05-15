@@ -47,6 +47,7 @@ public class RpcRequest implements Serializable {
     public RpcRequest() {
     }
 
+    //建造者模式
     public static class Builder {
         private String serviceName;
         private String methodName;
