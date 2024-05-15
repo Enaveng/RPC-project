@@ -64,6 +64,7 @@ public class TcpServiceProxy implements InvocationHandler {
             }
             //暂时先取第一个
             ServiceMetaInfo selectedServiceMetaInfo = serviceMetaInfoList.get(0);
+            //调用Tcp服务
             RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
             return rpcResponse.getData();
         } catch (Exception e) {

@@ -10,6 +10,7 @@ import com.enaveng.rpc.registry.Registry;
 import com.enaveng.rpc.registry.RegistryFactory;
 import com.enaveng.rpc.server.VertxHttpServer;
 import com.enaveng.rpc.server.tcp.VertxTcpServer;
+import io.vertx.core.Vertx;
 
 /**
  * 启动使用TCP服务

@@ -6,7 +6,7 @@ import com.enaveng.rpc.proxy.ServiceProxyFactory;
 import com.enaveng.rpc.proxy.TcpServiceProxyFactory;
 
 /**
- * 简易服务消费者示例
+ * 使用Tcp协议 消费者示例
  */
 public class TcpConsumerExample {
     public static void main(String[] args) {
