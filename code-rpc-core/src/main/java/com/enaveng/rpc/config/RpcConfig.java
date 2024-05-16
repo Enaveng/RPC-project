@@ -2,6 +2,9 @@ package com.enaveng.rpc.config;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.enaveng.rpc.loadbalancer.LoadBalancer;
+import com.enaveng.rpc.loadbalancer.LoadBalancerKeys;
+import com.enaveng.rpc.loadbalancer.RoundRobinLoadBalancer;
 import com.enaveng.rpc.serializable.SerializerKeys;
 import lombok.Data;
 
@@ -46,4 +49,8 @@ public class RpcConfig {
      */
     private RegistryConfig registryConfig = new RegistryConfig();
 
+    /**
+     * 负载均衡策略
+     */
+    private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
 }

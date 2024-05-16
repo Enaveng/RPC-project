@@ -1,0 +1,3 @@
+random=com.enaveng.rpc.loadbalancer.RandomLoadBalancer
+roundRobin=com.enaveng.rpc.loadbalancer.RoundRobinLoadBalancer
+consistentHash=com.enaveng.rpc.loadbalancer.ConsistentHashLoadBalancer

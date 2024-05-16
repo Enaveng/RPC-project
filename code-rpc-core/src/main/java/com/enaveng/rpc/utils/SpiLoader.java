@@ -45,7 +45,7 @@ public class SpiLoader {
     }
 
     /**
-     * 加载某个类型
+     * 获取具体单个实例
      *
      * @param tClass
      * @param key
@@ -54,6 +54,7 @@ public class SpiLoader {
      */
     public static <T> T getInstance(Class<?> tClass, String key) {
         String tClassName = tClass.getName();
+        //从提前加载好的 loaderMap 当中获取指定key的对象并将其添加到instanceCache当中
         Map<String, Class<?>> keyClassMap = loaderMap.get(tClassName);
         if (keyClassMap == null) {
             throw new RuntimeException(String.format("SpiLoader 未加载 %s 类型", tClassName));
@@ -80,7 +81,7 @@ public class SpiLoader {
 
     /**
      * 加载某个类型
-     *
+     * 例如传递的对象为Serializer类型 则得到的为 com.enaveng.rpc.serializable.Serializer文件当中的所有内容(按照一行一行进行读取文件)
      * @param loadClass 序列化接口的class对象
      * @return
      */

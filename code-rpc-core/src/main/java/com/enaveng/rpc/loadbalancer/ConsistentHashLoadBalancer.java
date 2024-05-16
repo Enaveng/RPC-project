@@ -1,6 +1,5 @@
 package com.enaveng.rpc.loadbalancer;
 
-import cn.hutool.core.lang.tree.Tree;
 import com.enaveng.rpc.model.ServiceMetaInfo;
 
 import java.util.List;
@@ -27,17 +26,17 @@ public class ConsistentHashLoadBalancer implements LoadBalancer {
         if (serviceMetaInfoList.isEmpty()) {
             return null;
         }
-        //构建虚拟节点环
+        //构建虚拟换节点
         for (ServiceMetaInfo serviceMetaInfo : serviceMetaInfoList) {
             for (int i = 0; i < VIRTUAL_NODE_NUM; i++) {
                 int hash = getHash(serviceMetaInfo.getServiceAddress() + "#" + i);
                 virtualNodes.put(hash, serviceMetaInfo);
             }
         }
-        //获取调用请求的hash值
+        //根据参数得到hash值
         int hash = getHash(requestParams);
-
-        //选择最接近且大于等于调用请求hash值的虚拟节点
+        //从Hash环上得到相对应的服务地址
+        //得到大于或等于给定hash值的最小键值对
         Map.Entry<Integer, ServiceMetaInfo> entry = virtualNodes.ceilingEntry(hash);
         if (entry == null) {
             //如果没有大于等于调用请求hash值的虚拟节点 则返回环首部的节点
@@ -54,5 +53,17 @@ public class ConsistentHashLoadBalancer implements LoadBalancer {
      */
     private int getHash(Object key) {
         return key.hashCode();
+    }
+
+    public static void main(String[] args) {
+        TreeMap<Integer, Object> map = new TreeMap<>();
+        map.put(1, "A");
+        map.put(2, "B");
+//        map.put(3,"C");
+        map.put(4, "D");
+        map.put(5, "E");
+        Map.Entry<Integer, Object> entry = map.ceilingEntry(3);
+        System.out.println(entry.getKey());
+        System.out.println(entry.getValue());
     }
 }

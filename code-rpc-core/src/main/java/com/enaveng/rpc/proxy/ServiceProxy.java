@@ -7,6 +7,8 @@ import com.enaveng.rpc.RpcApplication;
 import com.enaveng.rpc.config.RegistryConfig;
 import com.enaveng.rpc.config.RpcConfig;
 import com.enaveng.rpc.constant.RpcConstant;
+import com.enaveng.rpc.loadbalancer.LoadBalanceFactory;
+import com.enaveng.rpc.loadbalancer.LoadBalancer;
 import com.enaveng.rpc.model.RpcRequest;
 import com.enaveng.rpc.model.RpcResponse;
 import com.enaveng.rpc.model.ServiceMetaInfo;
@@ -18,7 +20,9 @@ import com.enaveng.rpc.serializable.SerializerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 动态代理
@@ -31,7 +35,7 @@ public class ServiceProxy implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        //获取指定的序列化器
+        //获取指定的序列化器 读取配置文件方式
         final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 //        JdkSerializer jdkSerializer = new JdkSerializer();
         //构造请求对象
@@ -54,9 +58,13 @@ public class ServiceProxy implements InvocationHandler {
         if (CollUtil.isEmpty(serviceMetaInfoList)) {
             throw new RuntimeException("暂无服务地址");
         }
-        //暂时先取第一个
-        ServiceMetaInfo metaInfo = serviceMetaInfoList.get(0);
-
+        //使用负载均衡策略
+        LoadBalancer loadBalancer = LoadBalanceFactory.getInstance(RpcApplication.getRpcConfig().getLoadBalancer());
+        //将调用方法名(请求路径)作为负载均衡参数
+        Map<String, Object> requestParam = new HashMap<>();
+        String methodName = rpcRequest.getMethodName();
+        requestParam.put("methodName",methodName);
+        ServiceMetaInfo metaInfo = loadBalancer.select(requestParam, serviceMetaInfoList);
         //此处被硬编码 后续更改为从注册中心获取
         HttpResponse httpResponse = HttpRequest.post(metaInfo.getServiceAddress())
                 .body(bodyBytes)

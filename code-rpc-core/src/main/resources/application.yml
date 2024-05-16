@@ -5,3 +5,4 @@ rpc:
   mock: false
   #  小写
   serializer: jdk
+  loadbalancer: roundRobin
