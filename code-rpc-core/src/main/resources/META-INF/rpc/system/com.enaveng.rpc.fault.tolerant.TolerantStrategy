@@ -1,0 +1,6 @@
+failBack=com.enaveng.rpc.fault.tolerant.FailBackTolerantStrategy
+failFast=com.enaveng.rpc.fault.tolerant.FailFastTolerantStrategy
+failOver=com.enaveng.rpc.fault.tolerant.FailOverTolerantStrategy
+failSafe=com.enaveng.rpc.fault.tolerant.FailSafeTolerantStrategy
+
+

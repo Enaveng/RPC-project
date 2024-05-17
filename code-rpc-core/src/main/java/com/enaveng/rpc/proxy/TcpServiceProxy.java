@@ -7,6 +7,8 @@ import com.enaveng.rpc.config.RpcConfig;
 import com.enaveng.rpc.constant.RpcConstant;
 import com.enaveng.rpc.fault.retry.RetryStrategy;
 import com.enaveng.rpc.fault.retry.RetryStrategyFactory;
+import com.enaveng.rpc.fault.tolerant.TolerantStrategy;
+import com.enaveng.rpc.fault.tolerant.TolerantStrategyFactory;
 import com.enaveng.rpc.loadbalancer.LoadBalanceFactory;
 import com.enaveng.rpc.loadbalancer.LoadBalancer;
 import com.enaveng.rpc.model.RpcRequest;
@@ -69,11 +71,18 @@ public class TcpServiceProxy implements InvocationHandler {
             requestParam.put("methodName", methodName);
             ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParam, serviceMetaInfoList);
             //添加重试机制
-            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(RpcApplication.getRpcConfig().getRetryStrategy());
-            RpcResponse rpcResponse = retryStrategy.doRetry(() -> {
-                //调用Tcp服务
-                return VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
-            });
+            RpcResponse rpcResponse = null;
+            try {
+                RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(RpcApplication.getRpcConfig().getRetryStrategy());
+                rpcResponse = retryStrategy.doRetry(() -> {
+                    //调用Tcp服务
+                    return VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+                });
+            } catch (Exception e) {
+                // 容错机制
+                TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+                rpcResponse = tolerantStrategy.doTolerant(null, e);
+            }
             return rpcResponse.getData();
         } catch (Exception e) {
             throw new RuntimeException("调用失败");

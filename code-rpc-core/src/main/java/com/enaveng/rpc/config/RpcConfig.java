@@ -3,6 +3,7 @@ package com.enaveng.rpc.config;
 
 import cn.hutool.core.util.StrUtil;
 import com.enaveng.rpc.fault.retry.RetryStrategyKeys;
+import com.enaveng.rpc.fault.tolerant.TolerantStrategyKeys;
 import com.enaveng.rpc.loadbalancer.LoadBalancer;
 import com.enaveng.rpc.loadbalancer.LoadBalancerKeys;
 import com.enaveng.rpc.loadbalancer.RoundRobinLoadBalancer;
@@ -59,5 +60,10 @@ public class RpcConfig {
      * 重试机制策略
      */
     private String retryStrategy = RetryStrategyKeys.FIXED_INTERVAL;
+
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_FAST;
 
 }
