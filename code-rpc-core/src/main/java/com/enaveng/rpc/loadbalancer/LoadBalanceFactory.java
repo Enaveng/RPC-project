@@ -12,10 +12,10 @@ public class LoadBalanceFactory {
         SpiLoader.load(LoadBalancer.class);
     }
 
-    //默认的序列化器
+    //默认的负载均衡策略
     private static final LoadBalancer DEFAULT_LOAD_BALANCER = new RoundRobinLoadBalancer();
 
-    //获取序列化器
+    //获取负载均衡器
     public static LoadBalancer getInstance(String key) {
         return SpiLoader.getInstance(LoadBalancer.class, key);
     }

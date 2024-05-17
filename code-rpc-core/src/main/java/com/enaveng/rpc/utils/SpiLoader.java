@@ -80,8 +80,8 @@ public class SpiLoader {
 
 
     /**
-     * 加载某个类型
-     * 例如传递的对象为Serializer类型 则得到的为 com.enaveng.rpc.serializable.Serializer文件当中的所有内容(按照一行一行进行读取文件)
+     * 加载某个接口的实例
+     * 例如传递的对象为Serializer接口类型 则得到的为 com.enaveng.rpc.serializable.Serializer文件当中的所有内容(按照一行一行进行读取文件)
      * @param loadClass 序列化接口的class对象
      * @return
      */

@@ -1,0 +1,2 @@
+no=com.enaveng.rpc.fault.retry.NoRetryStrategy
+fixedInterval=com.enaveng.rpc.fault.retry.FixedIntervalRetryStrategy

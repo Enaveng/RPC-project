@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * 动态代理
@@ -63,7 +64,7 @@ public class ServiceProxy implements InvocationHandler {
         //将调用方法名(请求路径)作为负载均衡参数
         Map<String, Object> requestParam = new HashMap<>();
         String methodName = rpcRequest.getMethodName();
-        requestParam.put("methodName",methodName);
+        requestParam.put("methodName", methodName);
         ServiceMetaInfo metaInfo = loadBalancer.select(requestParam, serviceMetaInfoList);
         //此处被硬编码 后续更改为从注册中心获取
         HttpResponse httpResponse = HttpRequest.post(metaInfo.getServiceAddress())
