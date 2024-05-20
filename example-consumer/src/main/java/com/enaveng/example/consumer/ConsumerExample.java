@@ -2,14 +2,15 @@ package com.enaveng.example.consumer;
 
 import com.enaveng.example.common.model.User;
 import com.enaveng.example.common.service.UserService;
+import com.enaveng.rpc.ProviderBootstrap.ConsumerBootstrap;
 import com.enaveng.rpc.config.RpcConfig;
 import com.enaveng.rpc.proxy.ServiceProxyFactory;
 import com.enaveng.rpc.utils.ConfigUtils;
 
 public class ConsumerExample {
     public static void main(String[] args) {
-//        RpcConfig rpc = ConfigUtils.loadConfig(RpcConfig.class, "rpc");
-//        System.out.println(rpc);
+        //服务提供者初始化
+        ConsumerBootstrap.init();
         //参数为 指定代理类所需要实现的接口
         UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
